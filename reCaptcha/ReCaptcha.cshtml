@@ -108,9 +108,11 @@
 
     public static IEnumerable<ErrorCodes> GetLastErrors(HttpContextBase context)
     {
+        context = context ?? (HttpContext.Current != null ? new HttpContextWrapper(HttpContext.Current) : null);
+
         if (context == null)
             return null;
-        
+            
         if (context.Items.Contains(ErrorCodesCacheKey))
         {
             return context.Items[ErrorCodesCacheKey] as IEnumerable<ErrorCodes>;
@@ -120,9 +122,6 @@
 
     public static IEnumerable<string> GetLastErrorsNames(HttpContextBase context)
     {
-        if (context == null)
-            return null;
-            
         return GetLastErrors(context).Select(e => Enum.GetName(typeof (ErrorCodes), e));
     }
 
