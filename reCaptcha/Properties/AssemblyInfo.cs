@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("reCaptcha")]
 [assembly: AssemblyDescription("Google reCaptcha ASP.NET MVC")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Kobi Kadosh")]
 [assembly: AssemblyProduct("reCaptcha")]
 [assembly: AssemblyCopyright("Copyright © 2014")]
 [assembly: AssemblyTrademark("")]

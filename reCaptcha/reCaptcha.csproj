@@ -77,6 +77,7 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>ReCaptcha.generated.cs</LastGenOutput>
     </None>
+    <None Include="reCaptcha.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
