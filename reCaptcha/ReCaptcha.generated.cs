@@ -84,11 +84,17 @@ namespace reCaptcha
     #line default
     #line hidden
     
+    #line 14 "..\..\ReCaptcha.cshtml"
+    using reCaptcha.Extensions;
+    
+    #line default
+    #line hidden
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     public class ReCaptcha : System.Web.WebPages.HelperPage
     {
         
-        #line 17 "..\..\ReCaptcha.cshtml"
+        #line 18 "..\..\ReCaptcha.cshtml"
 
     private const string reCaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
@@ -210,7 +216,7 @@ return new System.Web.WebPages.HelperResult(__razor_helper_writer => {
 
 
 
-#line 131 "..\..\ReCaptcha.cshtml"
+#line 132 "..\..\ReCaptcha.cshtml"
  
     // Ms helper - old
     //ReCaptcha.GetHtml(Context, @publicKey)
@@ -222,7 +228,7 @@ return new System.Web.WebPages.HelperResult(__razor_helper_writer => {
 
 
 
-#line 148 "..\..\ReCaptcha.cshtml"
+#line 149 "..\..\ReCaptcha.cshtml"
       
 
     if (String.IsNullOrEmpty(publicKey))
@@ -243,7 +249,7 @@ WriteLiteralTo(@__razor_helper_writer, "    <div class=\"g-recaptcha\" data-site
 
 
 
-#line 156 "..\..\ReCaptcha.cshtml"
+#line 157 "..\..\ReCaptcha.cshtml"
             WriteTo(@__razor_helper_writer, publicKey);
 
 #line default
@@ -253,7 +259,7 @@ WriteLiteralTo(@__razor_helper_writer, "\" data-theme=\"");
 
 
 
-#line 156 "..\..\ReCaptcha.cshtml"
+#line 157 "..\..\ReCaptcha.cshtml"
                                     WriteTo(@__razor_helper_writer, theme);
 
 #line default
@@ -263,7 +269,7 @@ WriteLiteralTo(@__razor_helper_writer, "\" data-type=\"");
 
 
 
-#line 156 "..\..\ReCaptcha.cshtml"
+#line 157 "..\..\ReCaptcha.cshtml"
                                                        WriteTo(@__razor_helper_writer, type);
 
 #line default
@@ -273,7 +279,7 @@ WriteLiteralTo(@__razor_helper_writer, "\" data-callback=\"");
 
 
 
-#line 156 "..\..\ReCaptcha.cshtml"
+#line 157 "..\..\ReCaptcha.cshtml"
                                                                              WriteTo(@__razor_helper_writer, callback);
 
 #line default
@@ -283,7 +289,7 @@ WriteLiteralTo(@__razor_helper_writer, "\"></div>\r\n");
 
 
 
-#line 157 "..\..\ReCaptcha.cshtml"
+#line 158 "..\..\ReCaptcha.cshtml"
 
 #line default
 #line hidden

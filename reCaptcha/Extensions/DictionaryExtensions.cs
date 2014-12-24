@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
-namespace reCaptcha
+namespace reCaptcha.Extensions
 {
     // TODO: move to external pack
     public static class DictionaryExtensions

@@ -4,9 +4,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace reCaptcha
+namespace reCaptcha.Extensions
 {
     // TODO: move to external pack
     public static class EnumHelper<T>
