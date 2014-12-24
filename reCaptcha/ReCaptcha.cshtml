@@ -1,0 +1,158 @@
+﻿@* Generator: WebPagesHelper *@
+
+@using System
+@using System.Collections.Generic
+@using System.Collections.Specialized
+@using System.IO
+@using System.Linq
+@using System.Net
+@using System.Web
+@using JetBrains.Annotations
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using reCaptcha
+
+
+@functions
+{
+    private const string reCaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
+
+    private static readonly object ErrorCodesCacheKey = new object();
+    
+    internal static string GetValidationUrl(HttpContextBase context, string privateKey)
+    {
+        var remoteIp = context.Request.ServerVariables["REMOTE_ADDR"];
+        if (String.IsNullOrEmpty(remoteIp))
+        {
+            throw new InvalidOperationException("reCaptcha remote IP not found");
+        }
+
+        // get user's response
+        var response = (context.Request.Form["g-recaptcha-response"] ?? String.Empty).Trim();
+
+        //
+        var builder = new UriBuilder(reCaptchaVerifyUrl);
+        var querystring = new NameValueCollection()
+            {
+                { "secret", privateKey},
+                { "response", response},
+                { "remoteip", remoteIp},
+            };
+        builder.Query = querystring.ToQueryString(false);
+
+        return builder.ToString();
+    }
+
+    internal static string GetValidationResponse(string requestUrl)
+    {
+        var request = WebRequest.Create(requestUrl);
+
+        using (var response = request.GetResponse())
+        {
+            var stream = response.GetResponseStream();
+
+            if (stream == null)
+                return null;
+
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+    }
+
+    public static bool Validate([NotNull] string privateKey)
+    {
+        return Validate(HttpContext.Current == null ? null : new HttpContextWrapper(HttpContext.Current), privateKey);
+    }
+
+
+    internal static bool Validate(HttpContextBase context, [NotNull] string privateKey)
+    {
+        // get recaptcha validation api url
+        var reqUrl = GetValidationUrl(context, privateKey);
+
+        var response = GetValidationResponse(reqUrl);
+
+        // no response - return false
+        if (response == null)
+            return false;
+
+        // TODO: bad response will throw exception
+        var responseJson = JsonConvert.DeserializeObject<dynamic>(response);
+
+        if (responseJson == null)
+            return false;
+
+        // use the error-codes returned
+
+        JArray jArr = responseJson["error-codes"];
+
+        if (jArr != null)
+        {
+            var errorCodes = jArr.Select(e => e.ToString()).ToArray();
+
+            var codesEnum = errorCodes.Select(EnumHelper<ErrorCodes>.GetValueFromDescription);
+
+            // save errors
+            SetLastErrors(context, codesEnum);
+        }
+
+        return responseJson.success;
+    }
+
+    internal static void SetLastErrors(HttpContextBase context, IEnumerable<ErrorCodes> value)
+    {
+        context.Items[ErrorCodesCacheKey] = value;
+    }
+
+    public static IEnumerable<ErrorCodes> GetLastErrors(HttpContextBase context)
+    {
+        if (context == null)
+            return null;
+        
+        if (context.Items.Contains(ErrorCodesCacheKey))
+        {
+            return context.Items[ErrorCodesCacheKey] as IEnumerable<ErrorCodes>;
+        }
+        return null;
+    }
+
+    public static IEnumerable<string> GetLastErrorsNames(HttpContextBase context)
+    {
+        if (context == null)
+            return null;
+            
+        return GetLastErrors(context).Select(e => Enum.GetName(typeof (ErrorCodes), e));
+    }
+
+}
+
+@helper GetHtml(string publicKey = null, string theme = null, string type = null, string callback = null)
+{
+    // Ms helper - old
+    //ReCaptcha.GetHtml(Context, @publicKey)
+
+    // explicit call to recaptcha
+    @*<script type="text/javascript">
+        var onloadCallback = function() {
+            grecaptcha.render('recaptcha_placeholder', {
+                'sitekey': '@publicKey'
+            });
+        };
+
+    </script>
+
+    <div id="recaptcha_placeholder"></div>
+
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    *@
+
+    if (String.IsNullOrEmpty(publicKey))
+    {
+        throw new ArgumentException("can't be null", "publicKey");
+    }
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <div class="g-recaptcha" data-sitekey="@publicKey" data-theme="@theme" data-type="@type" data-callback="@callback"></div>
+}
