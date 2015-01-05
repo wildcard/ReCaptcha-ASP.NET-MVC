@@ -14,6 +14,7 @@
     <tags>captcha google recaptcha asp.net mvc</tags>
   </metadata>
   <files>
+    <file src="obj\CodeGen\**\*.cs" target="src" />
     <file src="**\*.cshtml" target="src" />
   </files>
 </package>
