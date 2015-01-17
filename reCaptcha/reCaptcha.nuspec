@@ -12,6 +12,7 @@
     <description>$description$</description>
     <copyright>Copyright 2014</copyright>
     <tags>captcha google recaptcha asp.net mvc</tags>
+    <releaseNotes>add support for .net40</releaseNotes>
   </metadata>
   <files>
     <file src="obj\CodeGen\**\*.cs" target="src" />
