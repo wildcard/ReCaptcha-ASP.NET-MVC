@@ -19,7 +19,7 @@
     private const string reCaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
     private static readonly object ErrorCodesCacheKey = new object();
-    
+
     internal static string GetValidationUrl(HttpContextBase context, string privateKey)
     {
         var remoteIp = context.Request.ServerVariables["REMOTE_ADDR"];
@@ -113,7 +113,7 @@
 
         if (context == null)
             return null;
-            
+
         if (context.Items.Contains(ErrorCodesCacheKey))
         {
             return context.Items[ErrorCodesCacheKey] as IEnumerable<ErrorCodes>;
@@ -123,29 +123,38 @@
 
     public static IEnumerable<string> GetLastErrorsNames(HttpContextBase context)
     {
-        return GetLastErrors(context).Select(e => Enum.GetName(typeof (ErrorCodes), e));
+        return GetLastErrors(context).Select(e => Enum.GetName(typeof(ErrorCodes), e));
     }
 
 }
 
-@helper GetHtml(string publicKey = null, string theme = null, string type = null, string callback = null)
+@**
+    * return recaptcha html
+    * @see {@link https://developers.google.com/recaptcha/docs/display}
+    * @param {string} publicKey - Your sitekey.
+    * @param {string} theme - dark/light	light	Optional. The color theme of the widget.
+    * @param {string} type - audio/image	image	Optional. The type of CAPTCHA to serve.
+    * @param {string} callback - Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+    * @param {string} lang - {@link https://developers.google.com/recaptcha/docs/language}
+*@
+@helper GetHtml(string publicKey = null, string theme = null, string type = null, string callback = null, string lang = null)
 {
     // Ms helper - old
     //ReCaptcha.GetHtml(Context, @publicKey)
 
     // explicit call to recaptcha
     @*<script type="text/javascript">
-        var onloadCallback = function() {
-            grecaptcha.render('recaptcha_placeholder', {
-                'sitekey': '@publicKey'
-            });
-        };
+            var onloadCallback = function() {
+                grecaptcha.render('recaptcha_placeholder', {
+                    'sitekey': '@publicKey'
+                });
+            };
 
-    </script>
+        </script>
 
-    <div id="recaptcha_placeholder"></div>
+        <div id="recaptcha_placeholder"></div>
 
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=@lang" async defer></script>
     *@
 
     if (String.IsNullOrEmpty(publicKey))
@@ -153,7 +162,7 @@
         throw new ArgumentException("can't be null", "publicKey");
     }
 
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=@lang" async defer></script>
     <div class="g-recaptcha" data-sitekey="@publicKey" data-theme="@theme" data-type="@type" data-callback="@callback"></div>
 }
 

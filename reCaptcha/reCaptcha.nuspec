@@ -10,19 +10,24 @@
     <iconUrl>https://www.gstatic.com/recaptcha/api2/logo_48.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Copyright 2014</copyright>
     <tags>captcha google recaptcha asp.net mvc</tags>
-    <releaseNotes>add support for .net40</releaseNotes>
+    <releaseNotes>* Resolve - Language Settings for ReCaptcha #5 - add option to set language (hl parameter)
+    * add Microsoft.AspNet.Mvc nuget
+    * update Newtonsoft.Json
+    * add razorDoc to recaptcha.gethtml()
+    </releaseNotes>
   </metadata>
   <files>
     <file src="obj\CodeGen\**\*.cs" target="src" />
     <file src="**\*.cshtml" target="src" />
 
+    <file src="bin\Release\$id$.pdb" target="lib\net451\$id$.pdb" />
+    
     <file src="bin\Release\net40\$id$.dll" target="lib\net40\$id$.dll" />
-    <!--<file src="bin\Release\net40\$id$.pdb" target="lib\net40\$id$.pdb" />-->
+    <file src="bin\Release\net40\$id$.pdb" target="lib\net40\$id$.pdb" />
     
     <file src="bin\Release\net45\$id$.dll" target="lib\net45\$id$.dll" />
-    <!--<file src="bin\Release\net45\$id$.pdb" target="lib\net45\$id$.pdb" />-->
+    <file src="bin\Release\net45\$id$.pdb" target="lib\net45\$id$.pdb" />
 
   </files>
 </package>
