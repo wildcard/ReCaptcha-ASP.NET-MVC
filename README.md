@@ -69,3 +69,47 @@ Add the following code to your ``Views/Merchants/Register.cshtml``:
 ```
 
 ## Done!
+
+---
+
+## Usage
+
+### `@ReCaptcha.GetHtml(...)`
+
+Let's talk more about the most basic way to get started:
+
+``` razor
+@ReCaptcha.GetHtml("site-key")
+```
+
+#### Arguments
+
+The synopsis for the `@ReCaptcha.GetHtml` function is:
+
+``` razor
+@ReCaptcha.GetHtml(publicKey, [theme], [type], [callback], [lang])
+```
+
+1. `publicKey` is a string .
+2. `theme` is a string .
+3. `type` is a string .
+4. `callback` is a string .
+5. `lang` is a string .
+
+##### ReCaptcha Parameter [reCaptcha doc](https://developers.google.com/recaptcha/docs/display) 
+
+key | value | default | description
+----|-------|---------|------------
+`publicKey` | | | Your sitekey.
+`theme` | dark/light | light | Optional. The color theme of the widget.
+`type` | audio/image | image | Optional. The type of CAPTCHA to serve.
+`callback` |  |  | Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+`lang` | See [language codes](https://developers.google.com/recaptcha/docs/language) | | Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.
+
+### `@ReCaptcha.Validate(...)`
+
+##### ReCaptcha Parameter
+
+### `@ReCaptcha.GetLastErrors(HttpContextBase context)`
+
+##### ReCaptcha Parameter
