@@ -71,7 +71,6 @@ Add the following code to your ``Views/Merchants/Register.cshtml``:
 
 ## Done!
 
----
 
 ## Usage
 
@@ -105,16 +104,19 @@ key | value | default | description
 
 see [recaptcha doc](https://developers.google.com/recaptcha/docs/verify)
 
-privateKey 'Secret key' is Required. The shared key between your site and ReCAPTCHA.
-
 returns true for valid response from user, false otherwise.
 
 ##### ReCaptcha Parameter
 
+privateKey 'Secret key' is Required. The shared key between your site and ReCAPTCHA.
+
 ### `@ReCaptcha.GetLastErrors(HttpContextBase context)`
 
 see [recaptcha doc](https://developers.google.com/recaptcha/docs/verify#error-code-reference)
-returns a IEnumrable<reCaptcha.ErrorCodes>. 
+
+returns a `IEnumerable<reCaptcha.ErrorCodes>`. 
 if returns null the no errors occurred. 
 
 ##### ReCaptcha Parameter
+
+context is your HttpContenxt e.g. `this.HttpContext`
