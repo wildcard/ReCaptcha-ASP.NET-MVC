@@ -42,8 +42,9 @@ public class AccountsController : Controller
                 return View("RegisterConfirmation");
             }
 
-            ViewBag.RecaptchaLastErros = ReCaptcha.GetLastErrors(this.HttpContext);
-            ViewBag.Recaptcha = ReCaptcha.GetHtml(ConfigurationManager.AppSettings["ReCaptcha:SiteKey"]);
+            ViewBag.RecaptchaLastErrors = ReCaptcha.GetLastErrors(this.HttpContext);
+            
+            ViewBag.publicKey = ConfigurationManager.AppSettings["ReCaptcha:SiteKey"];
 
             return View(request);
         }
@@ -60,12 +61,62 @@ public class AccountsController : Controller
 Add the following code to your ``Views/Merchants/Register.cshtml``:
 
 ```c#
-@ViewBag.Recaptcha
+@ReCaptcha.GetHtml(@ViewBag.publicKey)
             
-@if (ViewBag.RecaptchaLastErros != null)
+@if (ViewBag.RecaptchaLastErrors != null)
 {
     <div>Oops! Invalid reCAPTCHA =(</div>
 }
 ```
 
 ## Done!
+
+
+## Usage
+
+### `@ReCaptcha.GetHtml(...)`
+
+Let's talk more about the most basic way to get started:
+
+``` razor
+@ReCaptcha.GetHtml("site-key")
+```
+
+#### Arguments
+
+The synopsis for the `@ReCaptcha.GetHtml` function is:
+
+``` razor
+@ReCaptcha.GetHtml(publicKey, [theme], [type], [callback], [lang])
+```
+
+##### ReCaptcha Parameter [reCaptcha doc](https://developers.google.com/recaptcha/docs/display) 
+
+key | value | default | description
+----|-------|---------|------------
+`publicKey` | | | Your sitekey.
+`theme` | dark/light | light | Optional. The color theme of the widget.
+`type` | audio/image | image | Optional. The type of CAPTCHA to serve.
+`callback` |  |  | Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+`lang` | See [language codes](https://developers.google.com/recaptcha/docs/language) | | Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.
+
+### `@ReCaptcha.Validate(privateKey)`
+
+see [recaptcha doc](https://developers.google.com/recaptcha/docs/verify)
+
+returns true for valid response from user, false otherwise.
+
+##### ReCaptcha Parameter
+
+privateKey 'Secret key' is Required. The shared key between your site and ReCAPTCHA.
+
+### `@ReCaptcha.GetLastErrors(HttpContextBase context)`
+
+see [recaptcha doc](https://developers.google.com/recaptcha/docs/verify#error-code-reference)
+
+returns a `IEnumerable<reCaptcha.ErrorCodes>`. 
+if returns null the no errors occurred. 
+
+##### ReCaptcha Parameter
+
+context is your HttpContenxt e.g. `this.HttpContext`
