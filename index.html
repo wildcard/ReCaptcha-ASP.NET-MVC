@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>ReCaptcha ASP.NET MVC by kobi-kadosh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">ReCaptcha ASP.NET MVC</h1>
+      <h2 class="project-tagline">ReCaptcha ASP.NET MVC version 2.0 wrapper</h2>
+      <a href="https://github.com/kobi-kadosh/ReCaptcha-ASP.NET-MVC" class="btn">View on GitHub</a>
+      <a href="https://github.com/kobi-kadosh/ReCaptcha-ASP.NET-MVC/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kobi-kadosh/ReCaptcha-ASP.NET-MVC/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="recaptcha-aspnet-mvc" class="anchor" href="#recaptcha-aspnet-mvc" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReCaptcha-ASP.NET-MVC</h1>
+
+<p>ReCaptcha ASP.NET MVC latest version wrapper</p>
+
+<p><a href="https://www.google.com/recaptcha">https://www.google.com/recaptcha</a></p>
+
+<h1>
+<a id="install-via-nuget" class="anchor" href="#install-via-nuget" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install via Nuget</h1>
+
+<pre><code>Install-Package reCaptcha.AspNet.Mvc
+</code></pre>
+
+<h1>
+<a id="simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple usage</h1>
+
+<h3>
+<a id="1-get-google-recaptcha-at-httpswwwgooglecomrecaptcha" class="anchor" href="#1-get-google-recaptcha-at-httpswwwgooglecomrecaptcha" aria-hidden="true"><span class="octicon octicon-link"></span></a>1) Get Google reCAPTCHA at <a href="https://www.google.com/recaptcha">https://www.google.com/recaptcha</a>
+</h3>
+
+<h3>
+<a id="2-add-site-key-and-secret-key-to-your-webconfig" class="anchor" href="#2-add-site-key-and-secret-key-to-your-webconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>2) Add Site key and Secret key to your Web.config</h3>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">add</span> <span class="pl-e">key</span>=<span class="pl-s"><span class="pl-pds">"</span>ReCaptcha:SiteKey<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>your-site-key<span class="pl-pds">"</span></span> /&gt;
+&lt;<span class="pl-ent">add</span> <span class="pl-e">key</span>=<span class="pl-s"><span class="pl-pds">"</span>ReCaptcha:SecretKey<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>your-secret-key<span class="pl-pds">"</span></span> /&gt;</pre></div>
+
+<h3>
+<a id="3-add-server-side-integration-to-your-back-end" class="anchor" href="#3-add-server-side-integration-to-your-back-end" aria-hidden="true"><span class="octicon octicon-link"></span></a>3) Add server-side integration to your back-end</h3>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">AccountsController</span> : <span class="pl-k">Controller</span>
+{
+    [HttpGet]
+    <span class="pl-k">public</span> ActionResult <span class="pl-en">Register</span>()
+    {
+        ViewBag.Recaptcha = ReCaptcha.GetHtml(ConfigurationManager.AppSettings[<span class="pl-s"><span class="pl-pds">"</span>ReCaptcha:SiteKey<span class="pl-pds">"</span></span>]);
+
+        <span class="pl-k">return</span> View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    <span class="pl-k">public</span> ActionResult <span class="pl-en">Register</span>(<span class="pl-k">RegisterMerchantViewModel</span> <span class="pl-smi">request</span>)
+    {
+        <span class="pl-k">try</span>
+        {
+            <span class="pl-k">if</span> (ModelState.IsValid &amp;&amp; ReCaptcha.Validate(ConfigurationManager.AppSettings[<span class="pl-s"><span class="pl-pds">"</span>ReCaptcha:SecretKey<span class="pl-pds">"</span></span>]))
+            {
+                <span class="pl-c">// Do what you need</span>
+
+                <span class="pl-k">return</span> View(<span class="pl-s"><span class="pl-pds">"</span>RegisterConfirmation<span class="pl-pds">"</span></span>);
+            }
+
+            ViewBag.RecaptchaLastErrors = ReCaptcha.GetLastErrors(<span class="pl-c1">this</span>.HttpContext);
+
+            ViewBag.publicKey = ConfigurationManager.AppSettings[<span class="pl-s"><span class="pl-pds">"</span>ReCaptcha:SiteKey<span class="pl-pds">"</span></span>];
+
+            <span class="pl-k">return</span> View(request);
+        }
+        <span class="pl-k">catch</span> (Exception)
+        {
+            <span class="pl-k">return</span> <span class="pl-k">new</span> HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+        }
+    }
+}</pre></div>
+
+<h3>
+<a id="4-add-client-side-integration-to-your-front-end" class="anchor" href="#4-add-client-side-integration-to-your-front-end" aria-hidden="true"><span class="octicon octicon-link"></span></a>4) Add client-side integration to your front-end</h3>
+
+<p>Add the following code to your <code>Views/Merchants/Register.cshtml</code>:</p>
+
+<div class="highlight highlight-source-cs"><pre>@ReCaptcha.GetHtml(@ViewBag.publicKey)
+
+@if (ViewBag.RecaptchaLastErrors != <span class="pl-c1">null</span>)
+{
+    &lt;div&gt;Oops! Invalid reCAPTCHA =(&lt;/div&gt;
+}</pre></div>
+
+<h2>
+<a id="done" class="anchor" href="#done" aria-hidden="true"><span class="octicon octicon-link"></span></a>Done!</h2>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="recaptchagethtml" class="anchor" href="#recaptchagethtml" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>@ReCaptcha.GetHtml(...)</code>
+</h3>
+
+<p>Let's talk more about the most basic way to get started:</p>
+
+<pre lang="razor"><code>@ReCaptcha.GetHtml("site-key")
+</code></pre>
+
+<h4>
+<a id="arguments" class="anchor" href="#arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arguments</h4>
+
+<p>The synopsis for the <code>@ReCaptcha.GetHtml</code> function is:</p>
+
+<pre lang="razor"><code>@ReCaptcha.GetHtml(publicKey, [theme], [type], [callback], [lang])
+</code></pre>
+
+<h5>
+<a id="recaptcha-parameter-recaptcha-doc" class="anchor" href="#recaptcha-parameter-recaptcha-doc" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReCaptcha Parameter <a href="https://developers.google.com/recaptcha/docs/display">reCaptcha doc</a>
+</h5>
+
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>default</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>publicKey</code></td>
+<td></td>
+<td></td>
+<td>Your sitekey.</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td>dark/light</td>
+<td>light</td>
+<td>Optional. The color theme of the widget.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>audio/image</td>
+<td>image</td>
+<td>Optional. The type of CAPTCHA to serve.</td>
+</tr>
+<tr>
+<td><code>callback</code></td>
+<td></td>
+<td></td>
+<td>Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.</td>
+</tr>
+<tr>
+<td><code>lang</code></td>
+<td>See <a href="https://developers.google.com/recaptcha/docs/language">language codes</a>
+</td>
+<td></td>
+<td>Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="recaptchavalidateprivatekey" class="anchor" href="#recaptchavalidateprivatekey" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>@ReCaptcha.Validate(privateKey)</code>
+</h3>
+
+<p>see <a href="https://developers.google.com/recaptcha/docs/verify">recaptcha doc</a></p>
+
+<p>returns true for valid response from user, false otherwise.</p>
+
+<h5>
+<a id="recaptcha-parameter" class="anchor" href="#recaptcha-parameter" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReCaptcha Parameter</h5>
+
+<p>privateKey 'Secret key' is Required. The shared key between your site and ReCAPTCHA.</p>
+
+<h3>
+<a id="recaptchagetlasterrorshttpcontextbase-context" class="anchor" href="#recaptchagetlasterrorshttpcontextbase-context" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>@ReCaptcha.GetLastErrors(HttpContextBase context)</code>
+</h3>
+
+<p>see <a href="https://developers.google.com/recaptcha/docs/verify#error-code-reference">recaptcha doc</a></p>
+
+<p>returns a <code>IEnumerable&lt;reCaptcha.ErrorCodes&gt;</code>. 
+if returns null the no errors occurred. </p>
+
+<h5>
+<a id="recaptcha-parameter-1" class="anchor" href="#recaptcha-parameter-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReCaptcha Parameter</h5>
+
+<p>context is your HttpContenxt e.g. <code>this.HttpContext</code></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kobi-kadosh/ReCaptcha-ASP.NET-MVC">ReCaptcha ASP.NET MVC</a> is maintained by <a href="https://github.com/kobi-kadosh">kobi-kadosh</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
