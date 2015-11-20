@@ -5,6 +5,12 @@ ReCaptcha ASP.NET MVC latest version wrapper
 
 https://www.google.com/recaptcha
 
+# Install via Nuget
+
+```
+Install-Package reCaptcha.AspNet.Mvc
+```
+
 # Simple usage
 
 ### 1) Get Google reCAPTCHA at https://www.google.com/recaptcha
