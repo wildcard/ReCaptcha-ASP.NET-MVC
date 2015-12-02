@@ -62,9 +62,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorGenerator.Mvc">
-      <HintPath>..\packages\RazorGenerator.Mvc.2.2.3\lib\net40\RazorGenerator.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -81,7 +78,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,8 +106,8 @@
   </PropertyGroup>
   <Import Project="..\packages\RazorGenerator.MsBuild.2.2.6\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\packages\RazorGenerator.MsBuild.2.2.6\build\RazorGenerator.MsBuild.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>REM cd "$(SolutionDir)"
-REM .nuget\nuget pack -Symbols  "$(ProjectPath)"</PostBuildEvent>
+    <PostBuildEvent>cd "$(SolutionDir)"
+.nuget\nuget pack -Symbols  "$(ProjectPath)"</PostBuildEvent>
   </PropertyGroup>
   <!--<Target Name="AfterBuild">
     -->
