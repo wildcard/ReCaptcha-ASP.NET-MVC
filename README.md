@@ -1,6 +1,8 @@
 ReCaptcha-ASP.NET-MVC
 =====================
 
+[![Join the chat at https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC](https://badges.gitter.im/wildcard/ReCaptcha-ASP.NET-MVC.svg)](https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ReCaptcha ASP.NET MVC latest version wrapper
 
 https://www.google.com/recaptcha
