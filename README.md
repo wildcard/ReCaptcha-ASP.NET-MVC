@@ -2,6 +2,8 @@ ReCaptcha-ASP.NET-MVC
 =====================
 
 [![Join the chat at https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC](https://badges.gitter.im/wildcard/ReCaptcha-ASP.NET-MVC.svg)](https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NuGet Status](https://img.shields.io/nuget/dt/reCaptcha.AspNet.Mvc.svg)](https://www.nuget.org/packages/reCaptcha.AspNet.Mvc)
+[![NuGet Version](https://img.shields.io/nuget/v/reCaptcha.AspNet.Mvc.svg)](https://www.nuget.org/packages/reCaptcha.AspNet.Mvc)
 
 ReCaptcha ASP.NET MVC latest version wrapper
 
