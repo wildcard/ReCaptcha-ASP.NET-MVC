@@ -1,4 +1,4 @@
-ReCaptcha-ASP.NET-MVC [![Twitter](https://img.shields.io/twitter/url/https/github.com/wildcard/ReCaptcha-ASP.NET-MVC.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
+ReCaptcha-ASP.NET-MVC [![Twitter](https://img.shields.io/twitter/url/https/github.com/wildcard/ReCaptcha-ASP.NET-MVC.svg?style=social)](https://twitter.com/intent/tweet?text=Wow%20exactly%20what%20I%20was%20looking%20for!:&url=https://github.com/wildcard/ReCaptcha-ASP.NET-MVC)
 =====================
 
 [![Join the chat at https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC](https://badges.gitter.im/wildcard/ReCaptcha-ASP.NET-MVC.svg)](https://gitter.im/wildcard/ReCaptcha-ASP.NET-MVC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
