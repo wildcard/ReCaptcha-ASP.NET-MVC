@@ -81,7 +81,8 @@ Add the following code to your ``Views/Merchants/Register.cshtml``:
 ```
 
 #### Add client-side integration to your front-end for explicit use or multiple instance
-introduced in `1.2.3` requested in #11
+introduced in `1.2.3` requested in [ ](#11) 
+
 ```c#
 @ReCaptcha.GetExplictHtml("example1", @ViewBag.publicKey)
 
