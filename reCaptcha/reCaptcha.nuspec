@@ -12,7 +12,8 @@
     <description>$description$</description>
     <tags>captcha google recaptcha asp.net mvc</tags>
     <releaseNotes>
-      * Removed redundant dependency on Razor Generator - #9
+      * Updated major version - but didn't broke the current interface - safe to update
+      * Add multiple instance on one page support - #11
     </releaseNotes>
   </metadata>
 

@@ -16,6 +16,10 @@
 
 @functions
 {
+    private const string defaultOnloadCallback = "__recaptcha_onloadCallback";
+
+    private const string defaultWidgetRenderCallsArr = "__recaptcha_widgetRenderCallsArr";
+
     private const string reCaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
     private static readonly object ErrorCodesCacheKey = new object();
@@ -139,34 +143,94 @@
 *@
 @helper GetHtml(string publicKey = null, string theme = null, string type = null, string callback = null, string lang = null)
 {
-    // Ms helper - old
-    //ReCaptcha.GetHtml(Context, @publicKey)
-
-    // explicit call to recaptcha
-    @*<script type="text/javascript">
-            var onloadCallback = function() {
-                grecaptcha.render('recaptcha_placeholder', {
-                    'sitekey': '@publicKey'
-                });
-            };
-
-        </script>
-
-        <div id="recaptcha_placeholder"></div>
-
-        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=@lang" async defer></script>
-    *@
-
-    if (String.IsNullOrEmpty(publicKey))
-    {
-        throw new ArgumentException("can't be null", "publicKey");
-    }
+if (String.IsNullOrEmpty(publicKey))
+{
+    throw new ArgumentException("can't be null", "publicKey");
+}
 
     <script src="https://www.google.com/recaptcha/api.js?hl=@lang" async defer></script>
     <div class="g-recaptcha" data-sitekey="@publicKey" data-theme="@theme" data-type="@type" data-callback="@callback"></div>
 }
 
-@helper GetJsRefresh()
+@**
+    * return recaptcha explicit html
+    * @see {@link https://developers.google.com/recaptcha/docs/display}
+    * @param {string} id - the recaptcha widget id.
+    * @param {string} publicKey - Your sitekey.
+    * @param {string} widgetRenderCallsArr - js variable name for recaptcha render calls
+    * @param {string} theme - dark/light	light	Optional. The color theme of the widget.
+    * @param {string} type - audio/image	image	Optional. The type of CAPTCHA to serve.
+    * @param {string} callback - Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+*@
+@helper GetExplictHtml(string id, string publicKey = null, string widgetRenderCallsArr = defaultWidgetRenderCallsArr, string theme = null, string type = null, string callback = null)
 {
-    <text>grecaptcha.reset();</text>
+
+if (String.IsNullOrEmpty(publicKey))
+{
+    throw new ArgumentException("can't be null", "publicKey");
+}
+
+// build options
+var options = new
+{
+    sitekey = publicKey,
+    theme = theme,
+    callback = callback,
+    type = type
+};
+
+var optionsJson = JsonConvert.SerializeObject(options);
+
+var noEscapeOptionsJson = new HtmlString(optionsJson);
+
+// add render call
+    <script type="text/javascript">
+        // create calls arr
+        var @widgetRenderCallsArr = @widgetRenderCallsArr || [];
+
+        var arr = @widgetRenderCallsArr;
+
+        arr.push(function(){
+            grecaptcha.render('@id', @noEscapeOptionsJson);
+        });
+    </script>
+
+// recaptcha widget
+    <div id="@id"></div>
+}
+
+@**
+    * return recaptcha explicit script html
+    * @see {@link https://developers.google.com/recaptcha/docs/display}
+    * @param {string} lang - {@link https://developers.google.com/recaptcha/docs/language}
+    * @param {string} load - js variable name for recaptcha on load explicit call
+    * @param {string} widgetRenderCallsArr - js variable name for recaptcha render calls
+*@
+@helper GetExplictScript(string lang = null, string load = defaultOnloadCallback, string widgetRenderCallsArr = defaultWidgetRenderCallsArr)
+{
+// define explicit callback
+    <script type="text/javascript">
+        var @load = function() {
+
+            var arr = @widgetRenderCallsArr || [];
+            for (var i = 0; i < arr.length; i++) {
+                arr[i]();
+            }
+        };
+    </script>
+
+// explicit call to recaptcha
+    <script src="https://www.google.com/recaptcha/api.js?onload=@load&render=explicit&hl=@lang" async defer></script>
+}
+
+@helper GetJsRefresh(string id = null)
+{
+if (string.IsNullOrEmpty(id))
+{
+        <text>grecaptcha.reset();</text>
+}
+else
+{
+        <text>grecaptcha.reset('@id');</text>
+}
 }

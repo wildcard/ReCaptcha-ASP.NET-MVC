@@ -67,11 +67,27 @@ public class AccountsController : Controller
 ```
 
 ### 4) Add client-side integration to your front-end
+if you need multiple instance on one page please skip to next header
 
 Add the following code to your ``Views/Merchants/Register.cshtml``:
 
 ```c#
 @ReCaptcha.GetHtml(@ViewBag.publicKey)
+            
+@if (ViewBag.RecaptchaLastErrors != null)
+{
+    <div>Oops! Invalid reCAPTCHA =(</div>
+}
+```
+
+#### Add client-side integration to your front-end for explicit use or multiple instance
+introduced in `1.2.3` requested in #11
+```c#
+@ReCaptcha.GetExplictHtml("example1", @ViewBag.publicKey)
+
+@ReCaptcha.GetExplictHtml("example2", @ViewBag.publicKey)
+
+@ReCaptcha.GetExplictScript()
             
 @if (ViewBag.RecaptchaLastErrors != null)
 {
@@ -109,6 +125,58 @@ key | value | default | description
 `type` | audio/image | image | Optional. The type of CAPTCHA to serve.
 `callback` |  |  | Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
 `lang` | See [language codes](https://developers.google.com/recaptcha/docs/language) | | Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.
+
+### `@ReCaptcha.GetExplictHtml(...)`
+
+For enabling multi captcha in one page. please check the example for [Explicit rendering for multiple widgets](https://developers.google.com/recaptcha/docs/display?hl=en#example)
+
+simple use
+
+``` razor
+@ReCaptcha.GetExplictHtml("id","site-key")
+```
+
+#### Arguments
+
+The synopsis for the `@ReCaptcha.GetExplictHtml` function is:
+
+``` razor
+@ReCaptcha.GetExplictHtml(id, publicKey, [widgetRenderCallsArr], [theme], [type], [callback])
+```
+
+##### ReCaptcha Parameter [reCaptcha doc](https://developers.google.com/recaptcha/docs/display) 
+
+key | value | default | description
+----|-------|---------|------------
+`id`  | | | the recaptcha widget id. __required__ uniquely identifies the recaptcha widget
+`publicKey` | | | Your sitekey.
+`widgetRenderCallsArr` | | __recaptcha_widgetRenderCallsArr | js variable name for recaptcha render calls.
+`theme` | dark/light | light | Optional. The color theme of the widget.
+`type` | audio/image | image | Optional. The type of CAPTCHA to serve.
+`callback` |  |  | Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+
+### `@ReCaptcha. GetExplictScript([lang], [load], [widgetRenderCallsArr])`
+
+``` razor
+@ReCaptcha.GetExplictScript()
+```
+
+#### Arguments
+
+The synopsis for the `@ReCaptcha.GetExplictScript` function is:
+
+``` razor
+@ReCaptcha.GetExplictScript([lang], [load], [widgetRenderCallsArr])
+```
+
+##### ReCaptcha Parameter
+
+key | value | default | description
+----|-------|---------|------------
+`lang` | See [language codes](https://developers.google.com/recaptcha/docs/language) | | Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.
+`load`  | | __recaptcha_onloadCallback | js variable name for recaptcha on load explicit call.
+`widgetRenderCallsArr` | | __recaptcha_widgetRenderCallsArr | js variable name for recaptcha render calls.
+
 
 ### `@ReCaptcha.Validate(privateKey)`
 
