@@ -35,7 +35,7 @@ public class AccountsController : Controller
     public ActionResult Register()
     {
         ViewBag.Recaptcha = ReCaptcha.GetHtml(ConfigurationManager.AppSettings["ReCaptcha:SiteKey"]);
-
+        ViewBag.publicKey = ConfigurationManager.AppSettings["ReCaptcha:SiteKey"];
         return View();
     }
 
