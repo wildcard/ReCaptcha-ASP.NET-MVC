@@ -138,10 +138,22 @@
     * @param {string} publicKey - Your sitekey.
     * @param {string} theme - dark/light	light	Optional. The color theme of the widget.
     * @param {string} type - audio/image	image	Optional. The type of CAPTCHA to serve.
+    * @param {string} size - compact/normal	normal	Optional. The size of the widget.
+    * @param {int} tabIndex - 	0	Optional. The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.
     * @param {string} callback - Optional. Your callback function that's executed when the user submits a successful CAPTCHA response. The user's response, g-recaptcha-response, will be the input for your callback function.
+    * @param {string} expiredCallback - Optional. The name of your callback function, executed when the reCAPTCHA response expires and the user needs to re-verify.
+    * @param {string} errorCallback - Optional. The name of your callback function, executed when reCAPTCHA encounters an error (usually network connectivity) and cannot continue until connectivity is restored. If you specify a function here, you are responsible for informing the user that they should retry.
     * @param {string} lang - {@link https://developers.google.com/recaptcha/docs/language}
 *@
-@helper GetHtml(string publicKey = null, string theme = null, string type = null, string callback = null, string lang = null)
+@helper GetHtml(string publicKey = null, 
+                string theme = null, 
+                string type = null,
+                string size = "normal",
+                int tabIndex = 0,
+                string callback = null, 
+                string expiredCallback = null,
+                string errorCallback = null,
+                string lang = null)
 {
 if (String.IsNullOrEmpty(publicKey))
 {
@@ -149,7 +161,16 @@ if (String.IsNullOrEmpty(publicKey))
 }
 
     <script src="https://www.google.com/recaptcha/api.js?hl=@lang" async defer></script>
-    <div class="g-recaptcha" data-sitekey="@publicKey" data-theme="@theme" data-type="@type" data-callback="@callback"></div>
+    <div class="g-recaptcha" 
+         data-sitekey="@publicKey" 
+         data-theme="@theme" 
+         data-type="@type" 
+         data-size="@size"
+         data-tabindex="@tabIndex"
+         data-callback="@callback"
+         data-expired-callback="@expiredCallback"
+         data-error-callback="@errorCallback">
+    </div>
 }
 
 @**
