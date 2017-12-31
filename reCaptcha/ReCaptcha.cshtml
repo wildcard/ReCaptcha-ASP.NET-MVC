@@ -20,6 +20,8 @@
 
     private const string defaultWidgetRenderCallsArr = "__recaptcha_widgetRenderCallsArr";
 
+    private const string defaultWidgetIdsArr = "__recaptcha_widgetIdsArr";
+
     private const string reCaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
     private static readonly object ErrorCodesCacheKey = new object();
@@ -188,10 +190,8 @@ var noEscapeOptionsJson = new HtmlString(optionsJson);
         // create calls arr
         var @widgetRenderCallsArr = @widgetRenderCallsArr || [];
 
-        var arr = @widgetRenderCallsArr;
-
-        arr.push(function(){
-            grecaptcha.render('@id', @noEscapeOptionsJson);
+        @widgetRenderCallsArr.push(function(){
+            return grecaptcha.render('@id', @noEscapeOptionsJson);
         });
     </script>
 
@@ -206,15 +206,16 @@ var noEscapeOptionsJson = new HtmlString(optionsJson);
     * @param {string} load - js variable name for recaptcha on load explicit call
     * @param {string} widgetRenderCallsArr - js variable name for recaptcha render calls
 *@
-@helper GetExplictScript(string lang = null, string load = defaultOnloadCallback, string widgetRenderCallsArr = defaultWidgetRenderCallsArr)
+@helper GetExplictScript(string lang = null, string load = defaultOnloadCallback, string widgetRenderCallsArr = defaultWidgetRenderCallsArr, string widgetIdsArr = defaultWidgetIdsArr)
 {
 // define explicit callback
     <script type="text/javascript">
+        var @widgetIdsArr = @widgetIdsArr || [];
         var @load = function() {
 
             var arr = @widgetRenderCallsArr || [];
             for (var i = 0; i < arr.length; i++) {
-                arr[i]();
+                @widgetIdsArr.push(arr[i]());
             }
         };
     </script>
@@ -223,14 +224,31 @@ var noEscapeOptionsJson = new HtmlString(optionsJson);
     <script src="https://www.google.com/recaptcha/api.js?onload=@load&render=explicit&hl=@lang" async defer></script>
 }
 
+@helper GetJsWidgetId(int index = 0, string widgetIdsArr = defaultWidgetIdsArr)
+{
+    <text>@widgetIdsArr</text><text>[@index]</text>
+}
+
+@helper GetJsResponse(string id = null)
+{
+    if (string.IsNullOrEmpty(id))
+    {
+            <text>grecaptcha.getResponse()</text>
+    }
+    else
+    {
+            <text>grecaptcha.getResponse(@id)</text>
+    }
+}
+
 @helper GetJsRefresh(string id = null)
 {
-if (string.IsNullOrEmpty(id))
-{
-        <text>grecaptcha.reset();</text>
-}
-else
-{
-        <text>grecaptcha.reset('@id');</text>
-}
+    if (string.IsNullOrEmpty(id))
+    {
+            <text>grecaptcha.reset()</text>
+    }
+    else
+    {
+            <text>grecaptcha.reset(@id)</text>
+    }
 }
