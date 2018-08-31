@@ -28,6 +28,8 @@ Install-Package reCaptcha.AspNet.Mvc
 
 ### 3) Add server-side integration to your back-end
 
+> Add `using reCaptcha;` to the top of your C# file [see MSDN](https://msdn.microsoft.com/en-us/library/sf0df423.aspx)
+
 ```c#
 public class AccountsController : Controller
 {
@@ -67,7 +69,11 @@ public class AccountsController : Controller
 ```
 
 ### 4) Add client-side integration to your front-end
-if you need multiple instance on one page please skip to next header
+
+> Before you can use the Helper you should declare using it.
+  By add `@using reCaptcha` to the top of your Razor file. [See Link](http://stackoverflow.com/questions/3239006/how-do-i-import-a-namespace-in-razor-view-page) [#14](https://github.com/wildcard/ReCaptcha-ASP.NET-MVC/issues/14)
+
+*if you need multiple instance on one page please skip to next header*
 
 Add the following code to your ``Views/Merchants/Register.cshtml``:
 
