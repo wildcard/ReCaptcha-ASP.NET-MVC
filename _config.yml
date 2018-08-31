@@ -1,0 +1,8 @@
+title: ReCaptcha ASP.NET MVC
+description: ReCaptcha ASP.NET MVC version 2.0 wrapper
+google_analytics: UA-39774539-2
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
